@@ -16,6 +16,7 @@ def generate_short_url(length=6) :
 
 @app.route("/", methods=["GET" , "POST"])
 def index() :
+    short_url = None
     if request.method == "POST" :
         long_url = request.form["long_url"]
         short_url = generate_short_url()
@@ -25,8 +26,9 @@ def index() :
         shortened_urls[short_url] = long_url
         with open("urls.json","w") as f :
             json.dump(shortened_urls, f)
-        return f"Shortened URL: {request.url_root}{short_url}"
-    return render_template("index.html")
+        return render_template("index.html", short_url= short_url)
+    
+    return render_template("index.html", short_url= short_url)
 
 @app.route("/<short_url>" )
 def redirect_url(short_url) :
